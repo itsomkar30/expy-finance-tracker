@@ -4,16 +4,16 @@ from PIL import Image, ImageTk  # Use PIL for image handling
 
 
 
-def sign_in_page():
+def sign_up_page():
     # Create the main window
     root = tk.Tk()
     root.geometry("600x480")
     root.resizable(0, 0)
-    root.title("Sign-in ExPy")
+    root.title("Sign-up ExPy")
 
     # Fonts
-    nunito1 = ("Nunito ExtraBold", 22)
-    nunitosemi1 = ("Nunito SemiBold", 14)
+    nunito2 = ("Nunito ExtraBold", 22)
+    nunitosemi2 = ("Nunito SemiBold", 14)
 
     # Load images using PIL
     img = Image.open("assets/finance.jpg")
@@ -35,14 +35,14 @@ def sign_in_page():
     frame.pack(expand=True, side="right")
 
     # Welcome Text Label
-    welcome_label = tk.Label(frame, text="Welcome back!", fg="#601E88", bg="#ffffff", anchor="w", justify="left",
-                             font=nunito1)
-    welcome_label.pack(anchor="w", pady=(60, 20), padx=(50, 0))
+    welcome_label = tk.Label(frame, text="Welcome!", fg="#601E88", bg="#ffffff", anchor="w", justify="left",
+                             font=nunito2)
+    welcome_label.pack(anchor="w", pady=(60, 20), padx=(80, 0))
 
     # Subtitle Label
-    subtitle_label = tk.Label(frame, text="Sign in to your account", fg="#7E7E7E", bg="#ffffff", anchor="w",
-                              justify="left", font=nunitosemi1)
-    subtitle_label.pack(anchor="w", padx=(55, 0))
+    subtitle_label = tk.Label(frame, text="Sign up to your account", fg="#7E7E7E", bg="#ffffff", anchor="w",
+                              justify="left", font=nunitosemi2)
+    subtitle_label.pack(anchor="w", padx=(40, 0))
 
     # User icon with label
     # Uncomment if you want to use the user icon image
@@ -65,7 +65,7 @@ def sign_in_page():
     pass_entry = tk.Entry(input_frame, fg="black", width=24, font=entryfont)
     pass_entry.grid(row=3, columnspan=2, sticky="nw", pady=(20, 0), padx=(10, 0))
 
-    signin = tk.Button(input_frame, text="Sign in", bg="#601E88", fg="white", command=load, width=24, font=entryfont)
-    signin.grid(row=4, columnspan=3, sticky="nw", pady=(40, 0), padx=(10, 0))
+    signup = tk.Button(input_frame, text="Sign up", bg="#601E88", fg="white", command=load, width=24, font=entryfont)
+    signup.grid(row=4, columnspan=3, sticky="nw", pady=(40, 0), padx=(10, 0))
     # Run the Tkinter event loop
     root.mainloop()

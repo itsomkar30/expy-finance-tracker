@@ -1,6 +1,8 @@
 import tkinter as tk
 from tkinter import PhotoImage
 from PIL import Image, ImageTk  # Use PIL for image handling
+from siginin import sign_in_page
+from signup import sign_up_page
 
 # Create the main window
 root = tk.Tk()
@@ -50,10 +52,20 @@ def load():
     print("Submit clicked!")  # Replace with actual function
 
 
-signin = tk.Button(input_frame, text="Sign in", bg="#601E88", fg="white", command=load, width=30)
+def sign_in_method():
+    root.destroy()
+    sign_in_page()
+
+
+def sign_up_method():
+    root.destroy()
+    sign_up_page()
+
+
+signin = tk.Button(input_frame, text="Sign in", bg="#601E88", fg="white", command=sign_in_method, width=30)
 signin.grid(row=2, columnspan=3, sticky="nw", pady=(30, 0), padx=(25, 0))
 
-signup = tk.Button(input_frame, text="Sign up", bg="#601E88", fg="white", command=load, width=30)
+signup = tk.Button(input_frame, text="Sign up", bg="#601E88", fg="white", command=sign_up_method, width=30)
 signup.grid(row=3, columnspan=3, sticky="nw", pady=(30, 0), padx=(25, 0))
 
 # Run the Tkinter event loop
