@@ -1,7 +1,26 @@
 import tkinter as tk
 from tkinter import PhotoImage
+import requests
 from PIL import Image, ImageTk  # Use PIL for image handling
+from firebase import auth
 
+
+def add_placeholder(entry, placeholder_text):
+    entry.insert(0, placeholder_text)
+    entry.config(fg='grey')
+
+    def on_focus_in(event):
+        if entry.get() == placeholder_text:
+            entry.delete(0, tk.END)
+            entry.config(fg='black')
+
+    def on_focus_out(event):
+        if entry.get() == '':
+            entry.insert(0, placeholder_text)
+            entry.config(fg='grey')
+
+    entry.bind("<FocusIn>", on_focus_in)
+    entry.bind("<FocusOut>", on_focus_out)
 
 
 def sign_up_page():
@@ -54,18 +73,51 @@ def sign_up_page():
     input_frame.pack_propagate(0)
     input_frame.pack(expand=True, pady=(38, 0), padx=(20, 0), anchor="nw")
 
-    # Button
-    def load():
-        print("Submit clicked!")  # Replace with actual function
-
     entryfont = ("Nunito SemiBold", 12)
-    email_entry = tk.Entry(input_frame, fg="black", width=24, font=entryfont)
-    email_entry.grid(row=2, columnspan=2, sticky="nw", pady=(0, 0), padx=(10, 0))
+    new_email_entry = tk.Entry(input_frame, fg="black", width=24, font=entryfont)
+    new_email_entry.grid(row=2, columnspan=2, sticky="nw", pady=(0, 0), padx=(10, 0))
+    add_placeholder(new_email_entry, "Enter your email")
+    # new_email = new_email_entry.get().strip()
 
-    pass_entry = tk.Entry(input_frame, fg="black", width=24, font=entryfont)
-    pass_entry.grid(row=3, columnspan=2, sticky="nw", pady=(20, 0), padx=(10, 0))
+    new_pass_entry = tk.Entry(input_frame, fg="black", width=24, font=entryfont)
+    new_pass_entry.grid(row=3, columnspan=2, sticky="nw", pady=(20, 0), padx=(10, 0))
+    add_placeholder(new_pass_entry, "Enter Password")
+    # new_password = new_pass_entry.get().strip()
 
-    signup = tk.Button(input_frame, text="Sign up", bg="#601E88", fg="white", command=load, width=24, font=entryfont)
-    signup.grid(row=4, columnspan=3, sticky="nw", pady=(40, 0), padx=(10, 0))
-    # Run the Tkinter event loop
+    new_pass_entry_confirm = tk.Entry(input_frame, fg="black", width=24, font=entryfont)
+    new_pass_entry_confirm.grid(row=4, columnspan=2, sticky="nw", pady=(20, 0), padx=(10, 0))
+    add_placeholder(new_pass_entry_confirm, "Confirm Password")
+
+    # new_password_confirm = new_pass_entry_confirm.get().strip()
+
+    # def signup_database():
+    #     if new_password == new_password_confirm:
+    #         auth.create_user_with_email_and_password(new_email, new_password)
+    #         print("Signed up!")
+
+    def signup_database():
+        new_email = new_email_entry.get().strip()
+        new_password = new_pass_entry.get().strip()
+        new_password_confirm = new_pass_entry_confirm.get().strip()
+
+        if new_password == new_password_confirm:
+            try:
+                auth.create_user_with_email_and_password(new_email, new_password)
+                print("Signed up successfully!")
+                signup_result_label.config(text="Signed up successfully!")
+            except requests.exceptions.HTTPError as e:
+                print("User already exists")
+                signup_result_label.config(text="User already exists")
+                # print(f"Error: {e}")
+        else:
+            print("Passwords do not match")
+            signup_result_label.config(text="Passwords do not match")
+
+    signup = tk.Button(input_frame, text="Sign up", bg="#601E88", fg="white", command=signup_database, width=24,
+                       font=entryfont)
+    signup.grid(row=5, columnspan=3, sticky="nw", pady=(40, 0), padx=(10, 0))
+
+    signup_result_label = tk.Label(input_frame, text="", fg="red", bg="#ffffff", anchor="center",
+                                   justify="center")
+    signup_result_label.grid(row=6, columnspan=3, sticky="n", pady=(30, 0), padx=(10, 0))
     root.mainloop()

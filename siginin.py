@@ -1,7 +1,25 @@
 import tkinter as tk
 from tkinter import PhotoImage
 from PIL import Image, ImageTk  # Use PIL for image handling
+from firebase import auth
 
+
+def add_placeholder(entry, placeholder_text):
+    entry.insert(0, placeholder_text)
+    entry.config(fg='grey')
+
+    def on_focus_in(event):
+        if entry.get() == placeholder_text:
+            entry.delete(0, tk.END)
+            entry.config(fg='black')
+
+    def on_focus_out(event):
+        if entry.get() == '':
+            entry.insert(0, placeholder_text)
+            entry.config(fg='grey')
+
+    entry.bind("<FocusIn>", on_focus_in)
+    entry.bind("<FocusOut>", on_focus_out)
 
 
 def sign_in_page():
@@ -61,11 +79,35 @@ def sign_in_page():
     entryfont = ("Nunito SemiBold", 12)
     email_entry = tk.Entry(input_frame, fg="black", width=24, font=entryfont)
     email_entry.grid(row=2, columnspan=2, sticky="nw", pady=(0, 0), padx=(10, 0))
+    add_placeholder(email_entry, "Enter your email")
+    # email = email_entry.get()
 
     pass_entry = tk.Entry(input_frame, fg="black", width=24, font=entryfont)
     pass_entry.grid(row=3, columnspan=2, sticky="nw", pady=(20, 0), padx=(10, 0))
+    add_placeholder(pass_entry, "Enter Password")
 
-    signin = tk.Button(input_frame, text="Sign in", bg="#601E88", fg="white", command=load, width=24, font=entryfont)
+    # password = pass_entry.get()
+
+    def signin_database():
+        email = email_entry.get()
+        password = pass_entry.get()
+
+        try:
+            auth.sign_in_with_email_and_password(email, password)
+            print("Signed in!")
+            signin_result_label.config(text="Signed in successfully!")
+
+        except:
+            print("Invalid email password")
+            signin_result_label.config(text="Invalid email password combination")
+
+    signin = tk.Button(input_frame, text="Sign in", bg="#601E88", fg="white", command=signin_database, width=24,
+                       font=entryfont)
     signin.grid(row=4, columnspan=3, sticky="nw", pady=(40, 0), padx=(10, 0))
+
+    signin_result_label = tk.Label(input_frame, text="", fg="red", bg="#ffffff", anchor="center",
+                                   justify="center")
+    signin_result_label.grid(row=5, columnspan=3, sticky="n", pady=(30, 0), padx=(10, 0))
+
     # Run the Tkinter event loop
     root.mainloop()

@@ -7,11 +7,11 @@ firebaseConfig = {
     'storageBucket': "expensetrackerpy-cbe98.appspot.com",
     'messagingSenderId': "797554454730",
     'appId': "1:797554454730:web:47c56bfc3aa9b71b354433",
-    'measurementId': "G-7N77XNB7RR"
+    'measurementId': "G-7N77XNB7RR",
+    'databaseURL': "https://expensetrackerpy-cbe98.firebaseio.com"
 }
 
 firebase = pyrebase.initialize_app(firebaseConfig)
-
 
 db = firebase.database()
 auth = firebase.auth()

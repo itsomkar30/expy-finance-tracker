@@ -3,6 +3,7 @@ from tkinter import PhotoImage
 from PIL import Image, ImageTk  # Use PIL for image handling
 from siginin import sign_in_page
 from signup import sign_up_page
+from firebase import auth
 
 # Create the main window
 root = tk.Tk()
