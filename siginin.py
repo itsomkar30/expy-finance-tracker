@@ -72,10 +72,6 @@ def sign_in_page():
     input_frame.pack_propagate(0)
     input_frame.pack(expand=True, pady=(38, 0), padx=(20, 0), anchor="nw")
 
-    # Button
-    def load():
-        print("Submit clicked!")  # Replace with actual function
-
     entryfont = ("Nunito SemiBold", 12)
     email_entry = tk.Entry(input_frame, fg="black", width=24, font=entryfont)
     email_entry.grid(row=2, columnspan=2, sticky="nw", pady=(0, 0), padx=(10, 0))
@@ -93,8 +89,9 @@ def sign_in_page():
         password = pass_entry.get()
 
         try:
-            auth.sign_in_with_email_and_password(email, password)
-            print("Signed in!")
+            user = auth.sign_in_with_email_and_password(email, password)
+            user_uid = user['localId']
+            print(f"Signed in! User [ {user_uid} ]")
             signin_result_label.config(text="Signed in successfully!")
 
         except:
