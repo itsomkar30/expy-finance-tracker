@@ -3,6 +3,7 @@ from tkinter import PhotoImage
 import requests
 from PIL import Image, ImageTk  # Use PIL for image handling
 from firebase import auth
+from siginin import sign_in_page
 
 
 def add_placeholder(entry, placeholder_text):
@@ -56,7 +57,7 @@ def sign_up_page():
     # Welcome Text Label
     welcome_label = tk.Label(frame, text="Welcome!", fg="#601E88", bg="#ffffff", anchor="w", justify="left",
                              font=nunito2)
-    welcome_label.pack(anchor="w", pady=(60, 20), padx=(80, 0))
+    welcome_label.pack(anchor="w", pady=(60, 0), padx=(80, 0))
 
     # Subtitle Label
     subtitle_label = tk.Label(frame, text="Sign up to your account", fg="#7E7E7E", bg="#ffffff", anchor="w",
@@ -71,7 +72,7 @@ def sign_up_page():
     # Input section Frame
     input_frame = tk.Frame(frame, bg="#ffffff")
     input_frame.pack_propagate(0)
-    input_frame.pack(expand=True, pady=(38, 0), padx=(20, 0), anchor="nw")
+    input_frame.pack(expand=True, pady=(30, 0), padx=(20, 0), anchor="nw")
 
     entryfont = ("Nunito SemiBold", 12)
     new_email_entry = tk.Entry(input_frame, fg="black", width=24, font=entryfont)
@@ -115,9 +116,20 @@ def sign_up_page():
 
     signup = tk.Button(input_frame, text="Sign up", bg="#601E88", fg="white", command=signup_database, width=24,
                        font=entryfont)
-    signup.grid(row=5, columnspan=3, sticky="nw", pady=(40, 0), padx=(10, 0))
+    signup.grid(row=5, columnspan=3, sticky="nw", pady=(25, 0), padx=(10, 0))
 
     signup_result_label = tk.Label(input_frame, text="", fg="red", bg="#ffffff", anchor="center",
                                    justify="center")
     signup_result_label.grid(row=6, columnspan=3, sticky="n", pady=(30, 0), padx=(10, 0))
+
+    go_to_signin_label = tk.Label(input_frame, text="Try Sign-in instead", fg="red", bg="#ffffff", anchor="center",
+                                  justify="center", cursor="hand2", underline=True)
+    go_to_signin_label.grid(row=7, columnspan=3, sticky="n", pady=(30, 0), padx=(10, 0))
+
+    go_to_signin_label.bind("<Button-1>", lambda e: access_signin_from_signup())
+
+    def access_signin_from_signup():
+        root.destroy()
+        sign_in_page()
+
     root.mainloop()
