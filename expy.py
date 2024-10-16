@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import PhotoImage
 from PIL import Image, ImageTk  # Use PIL for image handling
-from siginin import sign_in_page
+from signin import sign_in_page
 from signup import sign_up_page
 from firebase import auth
 

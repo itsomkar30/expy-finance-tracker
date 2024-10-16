@@ -3,7 +3,7 @@ from tkinter import PhotoImage
 import requests
 from PIL import Image, ImageTk  # Use PIL for image handling
 from firebase import auth
-from siginin import sign_in_page
+from signin import sign_in_page
 
 
 def add_placeholder(entry, placeholder_text):

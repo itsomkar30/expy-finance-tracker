@@ -2,6 +2,9 @@ import tkinter as tk
 from tkinter import PhotoImage
 from PIL import Image, ImageTk  # Use PIL for image handling
 from firebase import auth
+# from check import main_gui
+# from check import check_user_status
+from tracker import main
 
 
 def add_placeholder(entry, placeholder_text):
@@ -93,6 +96,10 @@ def sign_in_page():
             user_uid = user['localId']
             print(f"Signed in! User [ {user_uid} ]")
             signin_result_label.config(text="Signed in successfully!")
+            # check_user_status(user_uid)
+            root.destroy()
+            main(user)
+
 
         except:
             print("Invalid email password")
