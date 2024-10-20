@@ -7,8 +7,33 @@ from tkcalendar import DateEntry
 from firebase import auth, db
 
 
+# def add_expense(category, amount, description, date, listbox, total_label):
+#     """Add a new expense."""
+#     if not current_user_id:
+#         messagebox.showerror("Error", "Please sign in first.")
+#         return
+#
+#     if not category.get() or not amount.get() or not description.get():
+#         messagebox.showerror("Error", "Please fill in all fields for the expense.")
+#         return
+#
+#     try:
+#         ref = db.child(f'users/{current_user_id}/expenses')
+#         ref.push({'date': date, 'category': category.get(), 'amount': amount.get(), 'description': description.get()})
+#         messagebox.showinfo("Success", "Expense recorded successfully")
+#         # category.delete(0, tk.END)
+#         category.set("")
+#         amount.set("")
+#         description.set("")
+#         # amount.delete(0, tk.END)
+#         # description.delete(0, tk.END)
+#         view_expenses(listbox, total_label)
+#     except Exception as e:
+#         messagebox.showerror("Error", f"{e}")
+
+
 def add_expense(category, amount, description, date, listbox, total_label):
-    """Add a new expense."""
+    """Add a new expense with date, month, and year stored as integers."""
     if not current_user_id:
         messagebox.showerror("Error", "Please sign in first.")
         return
@@ -18,15 +43,27 @@ def add_expense(category, amount, description, date, listbox, total_label):
         return
 
     try:
+        # Split the date into day, month, and year and convert them to integers
+        day, month, year = map(int, date.split("-"))
+
         ref = db.child(f'users/{current_user_id}/expenses')
-        ref.push({'date': date, 'category': category.get(), 'amount': amount.get(), 'description': description.get()})
+        # Store day, month, and year as integers along with the full date
+        ref.push({
+            'date': date,
+            'day': day,          # Integer format
+            'month': month,      # Integer format
+            'year': year,        # Integer format
+            'category': category.get(),
+            'amount': amount.get(),
+            'description': description.get()
+        })
         messagebox.showinfo("Success", "Expense recorded successfully")
-        # category.delete(0, tk.END)
+
+        # Clear input fields
         category.set("")
         amount.set("")
         description.set("")
-        # amount.delete(0, tk.END)
-        # description.delete(0, tk.END)
+
         view_expenses(listbox, total_label)
     except Exception as e:
         messagebox.showerror("Error", f"{e}")
@@ -144,6 +181,80 @@ def show_pie_chart():
     # Close the plot to free up resources
     plt.close()
 
+
+def show_pie_chart_date():
+    """Show a pie chart of expenses by category."""
+    if not idList or not expenseList:
+        messagebox.showinfo("No Data", "No expenses to show in pie chart.")
+        return
+
+    categories = {}
+    total = 0
+
+    # Group expenses by category and sum their amounts
+    for expense in expenseList:
+        category = expense['date']  # Use 'category' instead of 'date'
+        amount = int(expense['amount'])
+        total += amount
+        if category in categories:
+            categories[category] += amount
+        else:
+            categories[category] = amount
+
+    labels = categories.keys()  # Set labels to category names
+    sizes = categories.values()  # Set sizes to corresponding amounts
+    print(labels, "==", sizes)
+
+    # Plot the pie chart
+    plt.figure(figsize=(8, 6))
+    plt.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=140)
+    plt.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
+    plt.title(f'Expense Distribution by Category (Total: ${total:.2f})')
+    plt.show()
+
+    # Close the plot to free up resources
+    plt.close()
+
+
+
+
+# def show_pie_chart_month():
+#     """Show a pie chart of expenses by category."""
+#     if not idList or not expenseList:
+#         messagebox.showinfo("No Data", "No expenses to show in pie chart.")
+#         return
+#
+#     categories = {}
+#     total = 0
+#
+#     # Group expenses by category and sum their amounts
+#     for expense in expenseList:
+#         category = expense['month']  # Use 'category' instead of 'date'
+#         amount = int(expense['amount'])
+#         total += amount
+#         if category in categories:
+#             categories[category] += amount
+#         else:
+#             categories[category] = amount
+#
+#     labels = categories.keys()  # Set labels to category names
+#     sizes = categories.values()  # Set sizes to corresponding amounts
+#     print(labels, "==", sizes)
+#
+#     # Plot the pie chart
+#     plt.figure(figsize=(8, 6))
+#     plt.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=140)
+#     plt.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
+#     plt.title(f'Expense Distribution by Category (Total: ${total:.2f})')
+#     plt.show()
+#
+#     # Close the plot to free up resources
+#     plt.close()
+
+
+
+
+
     # categories = {}
     # total = 0
 
@@ -232,8 +343,17 @@ def setup_gui():
               command=lambda: delete_expense(selected_index.get(), listbox, total_label)).grid(row=7, column=1, pady=10)
 
     # Add pie chart button
-    tk.Button(root, text="Show Pie Chart", command=lambda: show_pie_chart()).grid(row=8, column=0, columnspan=2,
-                                                                                  pady=10)
+    tk.Button(root, text="Show Pie Chart by Categories", command=lambda: show_pie_chart()).grid(row=8, column=0,
+                                                                                                columnspan=2,
+                                                                                                pady=10)
+
+    tk.Button(root, text="Show Pie Chart By Date", command=lambda: show_pie_chart_date()).grid(row=9, column=0,
+                                                                                               columnspan=2,
+                                                                                               pady=10)
+
+    # tk.Button(root, text="Show Pie Chart By Month", command=lambda: show_pie_chart_month()).grid(row=10, column=0,
+    #                                                                                            columnspan=2,
+    #                                                                                            pady=10)
 
     # Add theme switch button
     # tk.Button(root, text="Switch Theme", command=lambda: switch_theme(root,current_theme)).grid(row=9, column=0,
