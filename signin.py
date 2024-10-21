@@ -5,6 +5,36 @@ from firebase import auth
 # from check import main_gui
 # from check import check_user_status
 from tracker import main
+import json
+import os
+
+DATA_FILE = 'logged_user.json'
+
+
+def load_id():
+    """Load expenses from the JSON file."""
+    if os.path.exists(DATA_FILE):
+        with open(DATA_FILE, 'r') as file:
+            return json.load(file)
+    return []
+
+
+def save_id(id):
+    """Save expenses to the JSON file."""
+    with open(DATA_FILE, 'w') as file:
+        json.dump(id, file, indent=4)
+    temp = load_id()
+    # print(temp['user'], temp['password'])
+
+
+def add_id(name, password):
+    """Add a new expense."""
+    var = {
+        'user': name,
+        'password': password
+    }
+    # expenses.append(var)
+    save_id(var)
 
 
 def add_placeholder(entry, placeholder_text):
@@ -25,6 +55,34 @@ def add_placeholder(entry, placeholder_text):
     entry.bind("<FocusOut>", on_focus_out)
 
 
+def add_placeholder_password(entry, placeholder_text):
+    entry.insert(0, placeholder_text)
+    entry.config(fg='grey')
+
+    def on_focus_in(event):
+        if entry.get() == placeholder_text:
+            entry.delete(0, tk.END)
+            entry.config(fg='black', show='*')  # Set 'show' to '*' when focusing in
+
+    def on_focus_out(event):
+        if entry.get() == '':
+            entry.insert(0, placeholder_text)
+            entry.config(fg='grey', show='')  # Reset 'show' to normal when unfocused and empty
+
+    entry.bind("<FocusIn>", on_focus_in)
+    entry.bind("<FocusOut>", on_focus_out)
+
+
+def sign_in_page_auto():
+    id = load_id()
+    if id:
+        user = auth.sign_in_with_email_and_password(id['user'], id['password'])
+        # root.destroy()
+        main(user)
+    else:
+        sign_in_page()
+
+
 def sign_in_page():
     # Create the main window
     root = tk.Tk()
@@ -39,12 +97,12 @@ def sign_in_page():
     # Load images using PIL
     img = Image.open("assets/finance.jpg")
     email_icon_data = Image.open("assets/user.png")
-    password_icon_data = Image.open("assets/lock.png")
+    # password_icon_data = Image.open("assets/lock.png")
 
     # Convert PIL images to ImageTk format for tkinter compatibility
     image = ImageTk.PhotoImage(img.resize((300, 400)))
     user_icon = ImageTk.PhotoImage(email_icon_data.resize((19, 19)))
-    password_icon = ImageTk.PhotoImage(password_icon_data.resize((20, 20)))
+    # password_icon = ImageTk.PhotoImage(password_icon_data.resize((20, 20)))
 
     # Left side: Image Label
     Lside = tk.Label(root, image=image)
@@ -65,11 +123,6 @@ def sign_in_page():
                               justify="left", font=nunitosemi1)
     subtitle_label.pack(anchor="w", padx=(55, 0))
 
-    # User icon with label
-    # Uncomment if you want to use the user icon image
-    # user_label = tk.Label(frame, text="  User: ", fg="#601E88", bg="#ffffff", anchor="w", font=("Arial Bold", 15), image=user_icon, compound="left")
-    # user_label.pack(anchor="w", pady=(38, 0), padx=(25, 0))
-
     # Input section Frame
     input_frame = tk.Frame(frame, bg="#ffffff")
     input_frame.pack_propagate(0)
@@ -83,7 +136,7 @@ def sign_in_page():
 
     pass_entry = tk.Entry(input_frame, fg="black", width=24, font=entryfont)
     pass_entry.grid(row=3, columnspan=2, sticky="nw", pady=(20, 0), padx=(10, 0))
-    add_placeholder(pass_entry, "Enter Password")
+    add_placeholder_password(pass_entry, "Enter Password")
 
     # password = pass_entry.get()
 
@@ -95,6 +148,7 @@ def sign_in_page():
             user = auth.sign_in_with_email_and_password(email, password)
             user_uid = user['localId']
             print(f"Signed in! User [ {user_uid} ]")
+            add_id(email, password)
             signin_result_label.config(text="Signed in successfully!")
             # check_user_status(user_uid)
             root.destroy()
