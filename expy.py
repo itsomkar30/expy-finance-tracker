@@ -21,7 +21,7 @@ def load_id():
 
 
 id = load_id()
-print(id)
+# print(id)
 if id:
     user = auth.sign_in_with_email_and_password(id['user'], id['password'])
     main(user)

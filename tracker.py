@@ -214,9 +214,14 @@ def show_pie_chart_transaction_type():
     sizes = categories.values()  # Set sizes to corresponding amounts
     print(labels, "==", sizes)
 
+    def autopct_label(pct):
+        amount = pct * total / 100
+        return f'{pct:.1f}%\n(${amount:.2f})'
+
     # Plot the pie chart
     plt.figure(figsize=(8, 6))
-    plt.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=140)
+    # plt.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=140)
+    plt.pie(sizes, labels=labels, autopct=autopct_label, startangle=140)
     plt.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
     plt.title(f'Expense Distribution by Category (Total: ${total:.2f})')
     plt.show()
