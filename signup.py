@@ -150,7 +150,7 @@ def sign_up_page():
                                    justify="center")
     signup_result_label.grid(row=7, columnspan=3, sticky="n", pady=(30, 0), padx=(10, 0))
 
-    go_to_signin_label = tk.Label(input_frame, text="Try Sign-in instead", fg="red", bg="#ffffff", anchor="center",
+    go_to_signin_label = tk.Label(input_frame, text="Try Sign-in instead", fg="blue", bg="#ffffff", anchor="center",
                                   justify="center", cursor="hand2", underline=True)
     go_to_signin_label.grid(row=8, columnspan=3, sticky="n", pady=(0, 30), padx=(0, 0))
 
