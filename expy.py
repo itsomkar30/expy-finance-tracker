@@ -82,7 +82,7 @@ else:
         sign_up_page()
 
 
-    signin = tk.Button(input_frame, text="Sign in", bg="#601E88", fg="white", command=sign_in_method, width=30)
+    signin = tk.Button(input_frame, text="Log in", bg="#601E88", fg="white", command=sign_in_method, width=30)
     signin.grid(row=2, columnspan=3, sticky="nw", pady=(30, 0), padx=(25, 0))
 
     signup = tk.Button(input_frame, text="Sign up", bg="#601E88", fg="white", command=sign_up_method, width=30)

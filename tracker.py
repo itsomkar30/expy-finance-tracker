@@ -116,7 +116,7 @@ def view_expenses(listbox, total_label):
             listbox.insert(tk.END,
                            f"Date: {expense_data['date']}, Category: {expense_data['category']}, Amount: {expense_data['amount']}, Description: {expense_data['description']}")
             idList.append(expense_id)
-        total_label.config(text=f"Total Expense: ${total:.2f}")
+        total_label.config(text=f"Total Expense: ₹{total:.2f}")
     else:
         listbox.insert(tk.END, "No expenses recorded.")
 
@@ -150,7 +150,7 @@ def show_pie_chart():
     plt.figure(figsize=(8, 6))
     plt.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=140)
     plt.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
-    plt.title(f'Expense Distribution by Category (Total: ${total:.2f})')
+    plt.title(f'Expense Distribution by Category (Total: ₹{total:.2f})')
     plt.show()
 
     # Close the plot to free up resources
@@ -184,7 +184,7 @@ def show_pie_chart_date(idList, expenseList):
     plt.figure(figsize=(8, 6))
     plt.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=140)
     plt.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
-    plt.title(f'Expense Distribution by Category (Total: ${total:.2f})')
+    plt.title(f'Expense Distribution by Category (Total: ₹{total:.2f})')
     plt.show()
 
     # Close the plot to free up resources
@@ -216,14 +216,14 @@ def show_pie_chart_transaction_type():
 
     def autopct_label(pct):
         amount = pct * total / 100
-        return f'{pct:.1f}%\n(${amount:.2f})'
+        return f'{pct:.1f}%\n(₹{amount:.2f})'
 
     # Plot the pie chart
     plt.figure(figsize=(8, 6))
     # plt.pie(sizes, labels=labels, autopct='%1.1f%%', startangle=140)
     plt.pie(sizes, labels=labels, autopct=autopct_label, startangle=140)
     plt.axis('equal')  # Equal aspect ratio ensures that pie is drawn as a circle.
-    plt.title(f'Expense Distribution by Category (Total: ${total:.2f})')
+    plt.title(f'Expense Distribution by Category (Total: ₹{total:.2f})')
     plt.show()
 
     # Close the plot to free up resources
@@ -267,8 +267,8 @@ def show_bar_by_month(idList, expenseList):
     plt.figure(figsize=(10, 6))
     bars = plt.bar(labels, values, color=colors)  # Use different colors for each bar
     plt.xlabel('Month')
-    plt.ylabel('Expense Amount ($)')
-    plt.title(f'Expense Distribution by Month (Total: ${total:.2f})')
+    plt.ylabel('Expense Amount (₹)')
+    plt.title(f'Expense Distribution by Month (Total: ₹{total:.2f})')
     plt.xticks(rotation=45, ha='right')  # Rotate month labels for readability
     plt.tight_layout()  # Adjust layout to prevent label clipping
 
@@ -337,7 +337,7 @@ def tabControls(root):
     # Add tabs to the notebook
     tab_control.add(tab1, text="Home")
     tab_control.add(tab2, text="Charts")
-    tab_control.add(tab3, text="About")
+    tab_control.add(tab3, text="Profile")
 
     # Display the notebook
     tab_control.pack(expand=1, fill='both')
@@ -379,7 +379,7 @@ def charts(tab):
     tab.grid_columnconfigure(1, weight=1)  # Allow column 1 to expand
 
 
-def about(tab, root, tabs):
+def profile(tab, root, tabs):
     try:
         original_image = Image.open('assets/user.png')  # Replace with your image path
         resized_image = original_image.resize((40, 40), Image.Resampling.LANCZOS)
@@ -414,7 +414,7 @@ def setup_gui():
 
     tab = tabControls(root)
     charts(tab[1])
-    about(tab[2], root, tab)
+    profile(tab[2], root, tab)
     print(get_name())
     name = get_name()
 
@@ -467,7 +467,7 @@ def setup_gui():
     listbox = tk.Listbox(tab[0], height=10, width=70)
     listbox.grid(row=5, column=0, columnspan=2, padx=10, pady=10)
 
-    total_label = tk.Label(tab[0], text="Total Expense: $0.00")
+    total_label = tk.Label(tab[0], text="Total Expense: ₹0.00")
     total_label.grid(row=6, column=0, columnspan=2)
 
     tk.Button(tab[0], text="View Expenses", command=lambda: view_expenses(listbox, total_label)).grid(row=7,
@@ -494,7 +494,7 @@ def setup_gui():
 
     view_expenses(listbox, total_label)  # Initial view
     # switch_theme(root, current_theme)  # Set initial theme
-
+    root.resizable(False, False)
     root.mainloop()
 
 
