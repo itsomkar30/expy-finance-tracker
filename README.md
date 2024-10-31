@@ -17,7 +17,7 @@ pip install tkcalendar
 
 ``` 
 
-Also, you need to change the `firebaseConfig` from the `firebase.py` file.
+Also, you need to change the `firebaseConfig` from the `firebase.py` file. [Reference Video](https://youtu.be/s-Ga8c3toVY?t=60)
 
 Run `expy.py` file to run application.
 
